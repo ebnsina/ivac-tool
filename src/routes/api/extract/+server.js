@@ -13,7 +13,7 @@ import { aiAvailable, aiLocateConfigs, friendlyAIError, readRateLimit } from '$l
 // This endpoint runs the uploaded bundle in a Node `vm` sandbox — it MUST use
 // the Node serverless runtime (not Edge), and needs headroom for the bundle
 // execution + AI call.
-export const config = { runtime: 'nodejs20.x', maxDuration: 60 };
+export const config = { runtime: 'nodejs20.x', maxDuration: 10 };
 
 /** @type {import('./$types').RequestHandler} */
 export async function POST({ request }) {

@@ -7,7 +7,7 @@ const config = {
     // maxDuration covers the bundle execution + AI call; raise on Pro if needed.
     adapter: adapter({
       runtime: 'nodejs20.x',
-      maxDuration: 60,
+      maxDuration: 10,
     }),
   },
 };
