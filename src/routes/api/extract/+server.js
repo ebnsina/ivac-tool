@@ -10,6 +10,11 @@ import { json } from '@sveltejs/kit';
 import { extract, extractFromSample, emitCodec, scanBundle } from '$lib/server/extractor.js';
 import { aiAvailable, aiLocateConfigs, friendlyAIError, readRateLimit } from '$lib/server/ai.js';
 
+// This endpoint runs the uploaded bundle in a Node `vm` sandbox — it MUST use
+// the Node serverless runtime (not Edge), and needs headroom for the bundle
+// execution + AI call.
+export const config = { runtime: 'nodejs20.x', maxDuration: 60 };
+
 /** @type {import('./$types').RequestHandler} */
 export async function POST({ request }) {
   let body;
