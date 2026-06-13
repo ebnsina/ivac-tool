@@ -199,7 +199,7 @@ export async function extractWithConfigs(src, configs, families) {
     '(function(){' + HARNESS_LIB +
     'var names=' + names + ';var mods=self.__MODS||{},mv=Object.keys(mods).filter(function(k){return mods[k]&&typeof mods[k].encryptText==="function"});' +
     'var out=[],call=self.__C||{};' +
-    'for(var k in call){var c=call[k];if(!c||typeof c.key!=="string"||c.key.length<8)continue;var name=names[+k]||("codec_"+c.startAt+"_"+c.length);var best=null;' +
+    'for(var k in call){var c=call[k];if(!c||typeof c.key!=="string"||c.key.length<8||/[\s]/.test(c.key))continue;var name=names[+k]||("codec_"+c.startAt+"_"+c.length);var best=null;' +
     'for(var i=0;i<mv.length;i++){var model=captureModel(mods[mv[i]],c.key,c.startAt,c.length);if(!model)continue;var ok=verify(mods[mv[i]],c.key,c.startAt,c.length,model);' +
     'var rec={name:name,key:c.key,startAt:c.startAt,length:c.length,version:null,model:model,kind:model.kind,verified:ok,source:"ai+callsite",preview:modelPreview(model)};' +
     'if(ok){best=rec;break;}if(!best)best=rec;}if(best)out.push(best);}' +
@@ -227,8 +227,8 @@ export async function extractFromSample(src, sample, families) {
     'var P=' + JSON.stringify(P) + ';var raw=P.raw,enc=P.encoded,lo=P.lo,hi=P.hi;' +
     'var mods=self.__MODS||{},mv=Object.keys(mods).filter(function(k){return mods[k]&&typeof mods[k].encryptText==="function"});' +
     'var keys={};var K=self.__K||{},C=self.__C||{};' +
-    'for(var k in K){var val=K[k];if(typeof val==="string"&&val.length>=16&&val.length<=96)keys[val]=1;}' +
-    'for(var k in C){if(C[k]&&typeof C[k].key==="string")keys[C[k].key]=1;}' +
+    'for(var k in K){var val=K[k];if(typeof val==="string"&&val.length>=16&&val.length<=96&&!/[\s]/.test(val))keys[val]=1;}' +
+    'for(var k in C){if(C[k]&&typeof C[k].key==="string"&&!/[\s]/.test(C[k].key))keys[C[k].key]=1;}' +
     'var wins={};function addW(sa,ln){if(sa>=0&&ln>0&&sa+ln<=raw.length)wins[sa+"/"+ln]={s:sa,l:ln};}' +
     'for(var i=0;i<P.callWindows.length;i++)addW(P.callWindows[i][0],P.callWindows[i][1]);' +
     'addW(lo,hi-lo+1);for(var s=Math.max(0,lo-2);s<=lo;s++)for(var ex=0;ex<=6;ex++)addW(s,hi-s+1+ex);' +

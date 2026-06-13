@@ -21,9 +21,11 @@ DECOY TO AVOID — the integrity/tamper self-check: it passes a LITERAL/CONSTANT
 
 You get candidate (startAt/length) windows, the API routes present, and code slices. Reason which candidates are REAL token transforms feeding a route, exclude the integrity decoy.
 
+THE KEY: a single string variable holding ~40-64 chars of random letters/digits/symbols with NO spaces (e.g. "vd@+sy&b)fjogphl3#=3i(-uuqemhdk2%7zuybitu)!^)rcy5v"). It is NOT a CSS class list (no spaces, no "text-"/"px-"/"flex"/"leading-"), NOT a style or className string, NOT a URL or label. If the only candidate you can find is a CSS/style/whitespace string, that is wrong — omit it.
+
 Return ONLY JSON, no prose:
 {"configs":[{"keyVar":"<identifier holding the key>","startAt":<int>,"length":<int>,"label":"signin|reserve|<short>"}]}
-- keyVar is a single JS identifier present in the slices (evaluated live to get the key).
+- keyVar is a single JS identifier present in the slices (evaluated live to get the key); its value must be a no-space cipher key as described above.
 - Return every real codec (usually 1-2). Omit rather than guess.`;
 
 function gatherContext(src) {

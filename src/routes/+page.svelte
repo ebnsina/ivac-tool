@@ -61,8 +61,8 @@
             const r = await extractWithConfigs(source, located.configs, families);
             codecs = r.codecs || [];
             const v = codecs.filter((c) => c.verified).length;
-            message = v ? `Recovered ${v} verified codec${v > 1 ? 's' : ''}.`
-              : (codecs.length ? 'Found candidates but none verified against the bundle.' : (r.err || "Couldn't recover a codec."));
+            message = v ? `Recovered ${v} codec${v > 1 ? 's' : ''} (self-checked — confirm with a real token sample for certainty).`
+              : (codecs.length ? 'Found candidates but none self-checked against the bundle.' : (r.err || "Couldn't recover a codec."));
           }
         } catch (e) { aiState.error = e.status ?? 'err'; aiState.message = e.message; message = e.message || 'AI request failed.'; }
       }
@@ -71,7 +71,7 @@
       const code = verified.length ? emitCodec(codecs, families, fileName) : '';
       if (aiState.usage) { sessionTokens += (aiState.usage.inputTokens || 0) + (aiState.usage.outputTokens || 0); sessionCost += aiState.usage.costUSD || 0; }
       res = { ok: verified.length > 0, message, families, codecs, code, ai: aiState };
-      banner = { kind: res.ok ? 'ok' : (codecs.length ? 'warn' : 'err'), text: message };
+      banner = { kind: res.ok ? (hasSample ? 'ok' : 'warn') : (codecs.length ? 'warn' : 'err'), text: message };
       showReport = !res.ok;
     } catch (e) {
       banner = { kind: 'err', text: String(e?.message || e) };
@@ -166,7 +166,9 @@
           {#each res.codecs as c}
             <div class="codec {c.verified ? 'good' : 'bad'}">
               <div class="codec-top"><b>{c.name}</b>
-                <span class="badge {c.verified ? 'b-ok' : 'b-warn'}">{c.verified ? 'verified' : 'unverified'}</span>
+                {#if !c.verified}<span class="badge b-warn">unverified</span>
+                {:else if c.source?.startsWith('sample')}<span class="badge b-ok">verified ✓ real token</span>
+                {:else}<span class="badge b-warn" title="Self-consistent against the bundle, but NOT checked against a real server token — confirm with a token sample.">self-checked ⚠</span>{/if}
                 <span class="meta">startAt {c.startAt} · length {c.length}{c.kind ? ' · ' + c.kind : ''}</span></div>
               <div class="kv">key <code>{c.key}</code></div>
               {#if c.shifts}<div class="kv">{c.kind === 'shift' ? 'shifts' : 'table'} <code>{c.shifts.join(',')}</code></div>{/if}
