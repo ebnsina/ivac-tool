@@ -1,13 +1,14 @@
-import adapter from '@sveltejs/adapter-vercel';
+import adapter from '@sveltejs/adapter-static';
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
   kit: {
-    // Vercel serverless (Node runtime — required for the bundle vm sandbox).
-    // maxDuration covers the bundle execution + AI call; raise on Pro if needed.
+    // Fully static — no server. The bundle runs in a browser iframe sandbox and
+    // the AI call goes browser->Claude direct. Host anywhere (Pages, shared host).
     adapter: adapter({
-      runtime: 'nodejs20.x',
-      maxDuration: 10,
+      fallback: 'index.html',
+      pages: 'build',
+      assets: 'build',
     }),
   },
 };

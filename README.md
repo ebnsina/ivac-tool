@@ -1,68 +1,30 @@
-# IVAC Codec Extractor (SvelteKit)
+# IVAC Codec Extractor
 
-Upload an obfuscated IVAC client bundle → the **server** runs it in a sandboxed
-Node VM, captures the real codec, and returns clean, standalone
-`transform-string.js`. The bundle execution and the Anthropic API key stay
-server-side — nothing sensitive ships to the browser.
+Recovers a clean, verified token codec from an obfuscated IVAC client bundle —
+**100% in the browser**. No server, no backend, no upload. Host it as static
+files anywhere (GitHub Pages, Cloudflare Pages, any shared host).
 
-## Why it survives bundle changes
+## How it works
+- The obfuscated bundle executes in a **sandboxed `<iframe>`** in your browser.
+- The codec is **probed there** over the full 64-char alphabet, capturing its
+  behaviour as `shift` / per-char `sub` / per-position `tables` — so it survives
+  cipher changes (logistic, polynomial, LFSR, LCG, Feistel all handled).
+- Two modes:
+  - **Sample mode (recommended, 100%)** — paste a real `raw → encoded` token
+    pair (from the app's Network tab). Deterministic, no AI, no key, no cost.
+  - **AI mode** — the call goes **browser → Claude directly** with *your own*
+    API key. The key is stored only in this browser's `localStorage`; it is
+    never in the build or sent anywhere else. Set a spend cap on the key.
 
-It never reconstructs the cipher. It captures the **shift numbers the bundle's
-own `encryptText` produces** (by probing it with an all-`0` window) and bakes
-those. New keystream algorithm, new key, new version → re-upload, done.
-
-Two recovery tiers:
-
-1. **Deterministic** (`src/lib/server/extractor.js`) — runs the bundle, grabs
-   the `encryptText`/`decryptText` exports, and recovers each `(key, startAt,
-   length)` from whichever shape the build uses:
-   - object-literal config + version map (`hQ` style)
-   - call-site int literals + key const (`LF` style)
-
-   Every codec is **verified** against the bundle's own functions before emit.
-
-2. **AI fallback** (`src/lib/server/ai.js`) — only if Tier 1 finds nothing
-   verified. Claude reads small slices of the bundle and points at the config
-   wiring (key variable + `startAt`/`length`). The bundle still computes the
-   real key; the AI output is still probed + verified. Requires
-   `ANTHROPIC_API_KEY`; without it the app just reports `AI available: false`.
-
-The app's call site is the only ground truth for the key (`encryptText` is
-generic over the key), which is exactly why this needs to read the app's wiring
-— deterministically when possible, with AI as backstop.
-
-## Run
-
+## Run / build
 ```bash
 pnpm install
-cp .env.example .env        # optional: add ANTHROPIC_API_KEY to enable AI fallback
-pnpm dev                    # http://localhost:5173
+pnpm dev                 # http://localhost:5173
+pnpm build               # static site in build/
 ```
+Deploy the `build/` folder to any static host (or upload it to shared hosting).
 
-Production:
-
-```bash
-pnpm build
-pnpm start                  # node build, BODY_SIZE_LIMIT=64M for large bundles
-```
-
-## Security notes
-
-- The uploaded bundle is **executed** server-side in an isolated `vm` context
-  with a stub DOM and no network. Only process bundles you trust.
-- The Anthropic key is read via `$env/dynamic/private` and never sent to the
-  client.
-- Server-only logic lives under `src/lib/server/`, which SvelteKit refuses to
-  bundle into client code.
-
-## Layout
-
-```
-src/
-  routes/
-    +page.svelte              upload UI (client)
-    api/extract/+server.js    POST handler (server) — orchestrates tier 1 + 2
-  lib/server/
-    extractor.js              run bundle, capture codec, probe, verify, emit
-    ai.js                     Claude fallback (config locator)
-```
+## Notes
+- AI mode needs an Anthropic API key you paste into the UI (browser-only).
+- Sample mode needs nothing — it's the fast, free, exact path.
+- Nothing is uploaded; the bundle and key never leave your machine.
