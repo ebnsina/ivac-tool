@@ -14,7 +14,7 @@ import { env } from '$env/dynamic/private';
 // $env/dynamic/private reads runtime env (works in dev from .env and in prod
 // from real env vars); fall back to process.env for non-SvelteKit callers.
 const API_KEY = () => env.ANTHROPIC_API_KEY || process.env.ANTHROPIC_API_KEY || '';
-const MODEL = env.IVAC_AI_MODEL || process.env.IVAC_AI_MODEL || 'claude-sonnet-4-6';
+const MODEL = env.IVAC_AI_MODEL || process.env.IVAC_AI_MODEL || 'claude-haiku-4-5';
 
 // Per-1M-token pricing (USD), input / output. Source: Anthropic pricing.
 const PRICES = {
@@ -57,7 +57,7 @@ function gatherContext(src) {
   while ((m = re.exec(src)) && n < 4) { add(m.index, 10, 220, 'key-concat'); n++; }
 
   let joined = windows.join('\n\n');
-  if (joined.length > 60000) joined = joined.slice(0, 60000);
+  if (joined.length > 22000) joined = joined.slice(0, 22000);
   return joined;
 }
 
@@ -153,7 +153,7 @@ export async function aiLocateConfigs(src, candidates = []) {
   const { data: msg, response } = await client.messages
     .create({
       model: MODEL,
-      max_tokens: 1536,
+      max_tokens: 768,
       system: SYSTEM,
       messages: [{ role: 'user', content: userMsg }],
     })

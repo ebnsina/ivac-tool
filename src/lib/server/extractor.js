@@ -182,7 +182,7 @@ function runAndCapture(src, scan, extraConfigs = [], aiOnly = false) {
   const patched = src.slice(0, ci) + inject + src.slice(ci);
   const sandbox = makeSandbox({ __MODS: null, __MAP: null, __L: null, __C: null, __K: null, __E: null });
   try {
-    vm.runInNewContext(patched, sandbox, { timeout: 10000 });
+    vm.runInNewContext(patched, sandbox, { timeout: 6000 });
   } catch (e) {
     // App often throws after our capture ran (integrity checks / React) — fine.
   }
