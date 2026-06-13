@@ -255,7 +255,7 @@
 <style>
   :global(:root){
     --bg:#0b0d12; --panel:#fff; --ink:#0f1422; --mut:#6b7280; --line:#e6e8ee;
-    --acc:#9b1b3a; --acc2:#c2334f; --ok:#16a34a; --okbg:#ecfdf3; --warn:#b45309;
+    --acc:#4f46e5; --acc2:#6366f1; --ok:#16a34a; --okbg:#ecfdf3; --warn:#b45309;
     --warnbg:#fffbeb; --err:#dc2626; --errbg:#fef2f2;
     --mono:ui-monospace,SFMono-Regular,Menlo,monospace;
     --font:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
@@ -264,10 +264,10 @@
   *{box-sizing:border-box}
   .page{min-height:100vh;display:flex;flex-direction:column}
 
-  .hero{background:linear-gradient(135deg,#15171f 0%,#241019 55%,#3a0f1f 100%);color:#fff;padding:30px 24px 26px}
+  .hero{background:linear-gradient(135deg,#13131f 0%,#1e1b3a 55%,#312e81 100%);color:#fff;padding:30px 24px 26px}
   .hero-inner{max-width:860px;margin:0 auto;display:flex;align-items:center;gap:16px}
   .logo{width:48px;height:48px;flex:none;display:grid;place-items:center;font-weight:800;border-radius:12px;
-    background:linear-gradient(135deg,var(--acc),var(--acc2));box-shadow:0 6px 20px rgba(155,27,58,.45)}
+    background:linear-gradient(135deg,var(--acc),var(--acc2));box-shadow:0 6px 20px rgba(79,70,229,.45)}
   .hero h1{margin:0;font-size:22px;font-weight:700;letter-spacing:-.02em}
   .hero p{margin:4px 0 0;color:#c8cad3;font-size:13px;max-width:640px;line-height:1.5}
 
@@ -286,7 +286,7 @@
   .drop{display:flex;align-items:center;gap:14px;padding:18px;border:1.5px dashed var(--line);border-radius:12px;
     cursor:pointer;transition:.15s;background:#fafbfc}
   .drop:hover{border-color:#cbd0da}
-  .drop.over{border-color:var(--acc);background:#fbeef1}
+  .drop.over{border-color:var(--acc);background:#eef2ff}
   .drop.filled{border-style:solid;background:#fff}
   .drop-icon{width:42px;height:42px;flex:none;display:grid;place-items:center;font-size:20px;border-radius:10px;background:#f1f2f6}
   .drop-text{display:flex;flex-direction:column;line-height:1.4}
@@ -298,17 +298,17 @@
   .sample summary{color:var(--acc);font-weight:600}
   .sample-hint{font-size:12px;color:var(--mut);margin:8px 0 8px;line-height:1.5}
   .tin{width:100%;margin-top:8px;font-family:var(--mono);font-size:12px;border:1px solid var(--line);border-radius:8px;padding:9px 11px;background:#fff}
-  .tin:focus{outline:none;border-color:var(--acc);box-shadow:0 0 0 3px rgba(155,27,58,.1)}
+  .tin:focus{outline:none;border-color:var(--acc);box-shadow:0 0 0 3px rgba(79,70,229,.1)}
   textarea{width:100%;min-height:120px;margin-top:8px;font-family:var(--mono);font-size:12px;border:1px solid var(--line);
     border-radius:10px;padding:10px;resize:vertical;background:#fff}
-  textarea:focus{outline:none;border-color:var(--acc);box-shadow:0 0 0 3px rgba(155,27,58,.1)}
+  textarea:focus{outline:none;border-color:var(--acc);box-shadow:0 0 0 3px rgba(79,70,229,.1)}
 
   .actions{margin-top:16px}
   button{cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--ink);padding:9px 16px;border-radius:9px;
     font:inherit;font-weight:600;font-size:13px;transition:.12s}
   button:hover{background:#f3f4f7}
   button.primary{background:var(--acc);border-color:var(--acc);color:#fff;padding:11px 22px}
-  button.primary:hover{background:#82122c}
+  button.primary:hover{background:#4338ca}
   button:disabled{opacity:.6;cursor:default}
   .spin{display:inline-block;width:12px;height:12px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;
     border-radius:50%;animation:sp .6s linear infinite;vertical-align:-1px;margin-right:6px}
