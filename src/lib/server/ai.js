@@ -14,7 +14,7 @@ import { env } from '$env/dynamic/private';
 // $env/dynamic/private reads runtime env (works in dev from .env and in prod
 // from real env vars); fall back to process.env for non-SvelteKit callers.
 const API_KEY = () => env.ANTHROPIC_API_KEY || process.env.ANTHROPIC_API_KEY || '';
-const MODEL = env.IVAC_AI_MODEL || process.env.IVAC_AI_MODEL || 'claude-haiku-4-5';
+const MODEL = env.IVAC_AI_MODEL || process.env.IVAC_AI_MODEL || 'claude-sonnet-4-6';
 
 // Per-1M-token pricing (USD), input / output. Source: Anthropic pricing.
 const PRICES = {
